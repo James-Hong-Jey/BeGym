@@ -1,0 +1,66 @@
+const express = require("express");
+const mysql = require("mysql");
+const cors = require("cors"); // cross platform (i.e. front to back)
+
+const app = express();
+
+app.use(express.json());
+app.use(cors());
+
+const db = mysql.createConnection( {
+    user:"root",
+    host:"localhost",
+    password:"password",
+    database: "users",
+})
+
+app.listen(8080, ()=> {
+    console.log("Trying")
+})
+
+//     ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password by 'jamesrules8387'
+
+app.post('/register', (req,res)=>{
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+    db.query(
+        "INSERT INTO users.login (username, password) VALUES (?,?)",
+        [username, password], 
+        (err, result) => {console.log(err)}
+    )
+})
+
+app.post('/login', (req,res) => {
+
+    const username = req.body.username;
+    const password = req.body.password;
+
+    db.query(
+        "SELECT * FROM users.login WHERE username = ? AND password = ?",
+        [username, password],
+        (err,result) => {
+            if(err) {
+                res.send({err:err});
+            }
+            if(result.length > 0){
+                res.send({ username: result.username });
+            } else {
+                res.send( {message: "Wrong Username or Password!"});
+            }
+        }
+    )
+})
+
+app.get("/", (req,res)=>{
+    res.json("Hello, this is the backend!")
+})
+
+app.get("/books", (req,res)=>{
+    const q = "SELECT * FROM books"
+    db.query(q, (err,data)=>{
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
