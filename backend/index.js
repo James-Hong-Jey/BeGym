@@ -15,10 +15,10 @@ const db = mysql.createConnection( {
 })
 
 app.listen(8080, ()=> {
-    console.log("Trying")
+    console.log("Connected to Backend!")
 })
 
-//     ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password by 'jamesrules8387'
+//     ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password by 'password'
 
 app.post('/register', (req,res)=>{
 
@@ -55,12 +55,4 @@ app.post('/login', (req,res) => {
 
 app.get("/", (req,res)=>{
     res.json("Hello, this is the backend!")
-})
-
-app.get("/books", (req,res)=>{
-    const q = "SELECT * FROM books"
-    db.query(q, (err,data)=>{
-        if(err) return res.json(err)
-        return res.json(data)
-    })
 })
