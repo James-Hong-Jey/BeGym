@@ -28,7 +28,8 @@ export default function LoginRegistration() {
       if(response.data.message){
         SetLoginStatus(response.data.message);
       } else {
-        SetLoginStatus(response.data[0].username);
+        // SetLoginStatus(response.data[0].username);
+        SetLoginStatus('Success!');
       }
     })
   }
