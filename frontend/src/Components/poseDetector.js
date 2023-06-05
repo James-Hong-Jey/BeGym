@@ -17,12 +17,42 @@ export default function PoseDetector() {
         const model = poseDetection.SupportedModels.MoveNet;
         const detector = await poseDetection.createDetector(model, detectorConfig);
 
-        setInterval(() => {
-            detect(net);
-        }, 10);
-
+        await getPoses();
     };
+    
+    const videoReady = () => {
+        console.log('video ready');
+    }
 
+    const setup = async () => {
+        const msg = new SpeechSynthesisUtterance('Currently loading..');
+        window.speechSynthesis.speak(msg);
+        createCanvas(640, 480);
+        const video = createCapture(VIDEO, videoReady);
+        video.hide();
+        
+        await runPoseDetector();
+    }
+
+    const getPoses = async () => {
+        const poses = await detector.estimatePoses(video.elt);
+        setTimeout(getPoses, 0);
+    }
+
+    const draw = () => {
+        background(220);
+        
+    }
+
+
+}
+
+
+
+
+
+
+/*
     const detect = async (net) => {
         // Check data is available
         if (
@@ -93,4 +123,5 @@ export default function PoseDetector() {
             </header>
         </div>
     );
-}
+
+    */
