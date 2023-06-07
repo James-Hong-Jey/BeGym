@@ -3,6 +3,7 @@
 /tutorialFront/
 /backend/node_modules/
 /frontend/node_modules/
+/Tensorflow/
 /Tensorflow/models/research/object_detection/models/
 
 # compiled output

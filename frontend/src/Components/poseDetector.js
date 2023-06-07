@@ -15,7 +15,7 @@ export default function PoseDetector() {
 
     const runPoseDetector = async () => {
         // This initialises webgpu backend (error otherwise)
-        await tf.setBackend('cpu');
+        await tf.setBackend('webgl');
         await tf.ready();
 
         // Using faster THUNDER config
@@ -27,7 +27,7 @@ export default function PoseDetector() {
         // Set to detect every 100 ms
         setInterval(() => {
             detect(detector);
-        }, 10)
+        }, 50)
     };
 
     const detect = async (detector) => {
@@ -83,6 +83,7 @@ export default function PoseDetector() {
                         zindex: 9,
                         width: 640,
                         height: 480,
+                        transform: "scaleX(-1)",
                     }}
                 />
 
