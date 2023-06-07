@@ -15,10 +15,14 @@ import { drawRect } from "./utilities";
 
 export default function Test_pose() {
   const webcamRef = useRef(null);
-  const canvasRef = useRef(null);
+  const canvasRef = useRef(null);  
 
   // Main function
   const runMovenet = async () => {
+
+    // This initialises webgpu backend (error otherwise)
+    await tf.setBackend('cpu');
+    await tf.ready();;
     
     // Official API
     // const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet);
@@ -55,7 +59,7 @@ export default function Test_pose() {
       // 4. TODO - Make Detections
       // e.g. const obj = await net.detect(video);
       const obj = await net.detect(video);
-      console.log(obj);
+      // console.log(obj);
 
       // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
