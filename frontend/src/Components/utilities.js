@@ -1,7 +1,8 @@
+// For cocossd detections
 export const drawRect = (detections, ctx) => {
-    detections.forEach(prediction=>{
+    detections.forEach(prediction => {
         // Get Results
-        const [x,y,width,height] = prediction['bbox'];
+        const [x, y, width, height] = prediction['bbox'];
         const text = prediction['class'];
 
         // Styling
@@ -12,8 +13,39 @@ export const drawRect = (detections, ctx) => {
 
         // Draw Rectangles & Text
         ctx.beginPath()
-        ctx.fillText(text,x,y)
-        ctx.rect(x,y,width,height)
+        ctx.fillText(text, x, y)
+        ctx.rect(x, y, width, height)
         ctx.stroke()
     })
+}
+
+// For pose detections
+export function drawSegment(ctx, [mx, my], [tx, ty], color) {
+    ctx.beginPath()
+    ctx.moveTo(mx, my)
+    ctx.lineTo(tx, ty)
+    ctx.lineWidth = 5
+    ctx.strokeStyle = color
+    ctx.stroke()
+}
+
+export function drawPoint(ctx, x, y, r, color) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+}
+
+// Draw keypoints on the canvas
+
+export function drawKeypoints(keypoints, minConfidence = 0.3, ctx, scale = 1) {
+    const color = "green";
+    // 0 to 4 are face stuff, idc about that 
+    for (let i = 5; i < 17; i++) {
+        const keypoint = keypoints[i];
+        if (keypoint.score < minConfidence) continue;
+        const x = keypoint.x;
+        const y = keypoint.y;
+        drawPoint(ctx, x * scale, y * scale, 3, color);
+    }
 }

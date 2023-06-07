@@ -11,10 +11,10 @@ export default function Header() {
     return (
         <div style={containerStyle}>
             <h1 className='header'>BeGym</h1>
-            <img src={pushup} className='headerPhoto' alt="" />
 
         </div>
     )
 }
+            //<img src={pushup} className='headerPhoto' alt="" />
 // source: https://hips.hearstapps.com/hmg-prod/images/mh-formcheck-index-social-1551985785.png
 //backgroundImage: 'url("./pushup.png")',

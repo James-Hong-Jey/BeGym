@@ -2,45 +2,42 @@ import React, { useEffect, useRef } from "react";
 import "../App.css";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
-//import * as poseDetection from '@tensorflow-models/coco-ssd';
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-// adapted from shamjam & nicknoch smth
+import { drawPoint, drawSegment, drawKeypoints } from "./utilities";
+
+// adapted from shamjam, harshbhatt7585 & nicknochnack smth
 
 export default function PoseDetector() {
 
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
 
-    let video;
-    let detector;
-    let poses;
-
     const runPoseDetector = async () => {
         // This initialises webgpu backend (error otherwise)
         await tf.setBackend('cpu');
-        await tf.ready();;
+        await tf.ready();
 
         // Using faster THUNDER config
         //const detectorConfig = { modeltype: poseDetection.movenet.modelType.SINGLEPOSE.THUNDER };
         const model = poseDetection.SupportedModels.MoveNet;
         //const detector = await poseDetection.createDetector(model, detectorConfig);
-        detector = await poseDetection.createDetector(model);
+        const detector = await poseDetection.createDetector(model);
 
         // Set to detect every 100 ms
-        setInterval( () => {
-            detect();
-        }, 100)
+        setInterval(() => {
+            detect(detector);
+        }, 10)
     };
 
-    const detect = async () => {
+    const detect = async (detector) => {
         if (
             typeof webcamRef.current !== "undefined" &&
             webcamRef.current !== null &&
             webcamRef.current.video.readyState === 4
         ) {
             // Get video properties
-            video = webcamRef.current.video;
+            const video = webcamRef.current.video;
             const videoWidth = webcamRef.current.video.videoWidth;
             const videoHeight = webcamRef.current.video.videoHeight;
 
@@ -49,9 +46,23 @@ export default function PoseDetector() {
             webcamRef.current.video.height = videoHeight;
 
             // Make Detections
-            poses = await detector.estimatePoses(video);
-            console.log(poses);
+            const poses = await detector.estimatePoses(video);
+            try {
+                console.log(poses);
+                if(poses && poses.length > 0)
+                    drawCanvas(poses, video, videoWidth, videoHeight, canvasRef);
+            } catch(err) {
+                console.log(err);
+            }
         }
+    }
+
+    const drawCanvas = async (poses, video, videoWidth, videoHeight, canvas) => {
+        const ctx = canvas.current.getContext("2d");
+        canvas.current.width = videoWidth;
+        canvas.current.height = videoHeight;
+
+        drawKeypoints(poses[0].keypoints, 0.3, ctx);
     }
 
     runPoseDetector();
@@ -92,46 +103,4 @@ export default function PoseDetector() {
             </header>
         </div>
     );
-
 }
-
-
-
-
-
-
-/*
-    const detect = async (net) => {
-        // Check data is available
-        if (
-            typeof webcamRef.current !== "undefined" &&
-            webcamRef.current !== null &&
-            webcamRef.current.video.readyState === 4
-        ) {
-            // Get Video Properties
-            const video = webcamRef.current.video;
-            const videoWidth = webcamRef.current.video.videoWidth;
-            const videoHeight = webcamRef.current.video.videoHeight;
-
-            // Set video width
-            webcamRef.current.video.width = videoWidth;
-            webcamRef.current.video.height = videoHeight;
-
-            // Set canvas height and width
-            canvasRef.current.width = videoWidth;
-            canvasRef.current.height = videoHeight;
-
-            // Actually detect stuff
-            const obj = await net.detect(video);
-            console.log(obj);
-
-            // Draw mesh
-            const ctx = canvasRef.current.getContext("2d");
-
-            // Draw the skeleton
-            drawRect(obj, ctx);
-        }
-    };
-
-    useEffect(() => { runPoseDetector() }, []);
-*/
