@@ -7,7 +7,7 @@ import * as poseDetection from '@tensorflow-models/coco-ssd';
 import Webcam from "react-webcam";
 //import "./App.css";
 // 2. TODO - Import drawing utility here
-import { drawRect } from "./utilities";
+import { drawRect } from "./drawing-utilities";
 // TODO - change draw rect to sketch the things
 
 // NOTE - This stuff is originally meant for cocossd but 

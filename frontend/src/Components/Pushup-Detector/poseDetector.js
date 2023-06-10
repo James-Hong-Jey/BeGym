@@ -1,20 +1,26 @@
-import React, { useEffect, useRef } from "react";
-import "../App.css";
+import React, { useRef } from "react";
+import "../../App.css";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-import { drawPoint, drawSegment, drawKeypoints } from "./utilities";
+import { drawKeypoints } from "./drawing-utilities";
 
 // adapted from shamjam, harshbhatt7585 & nicknochnack smth
 
+
 export default function PoseDetector() {
+
+    // ADJUSTABLE VARIABLES
+    const threshold = 0.3; // Sensitivity of detections
+    const refresh_rate = 50; // in ms. can cause flickering
 
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
 
     const runPoseDetector = async () => {
         // This initialises webgpu backend (error otherwise)
+        // can use wasm, webgpu, webgl, need to play around
         await tf.setBackend('webgl');
         await tf.ready();
 
@@ -27,7 +33,7 @@ export default function PoseDetector() {
         // Set to detect every 100 ms
         setInterval(() => {
             detect(detector);
-        }, 50)
+        }, refresh_rate)
     };
 
     const detect = async (detector) => {
@@ -62,7 +68,7 @@ export default function PoseDetector() {
         canvas.current.width = videoWidth;
         canvas.current.height = videoHeight;
 
-        drawKeypoints(poses[0].keypoints, 0.3, ctx);
+        drawKeypoints(poses[0].keypoints, threshold, ctx);
     }
 
     runPoseDetector();

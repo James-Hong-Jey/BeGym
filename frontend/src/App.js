@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
+// Only compatible with react-router-dom v5.2 so using Switch instead of Routes
 import './App.css';
-import LoginPage from './LoginPage';
+import LoginPage from './Components/Home-Page/LoginPage';
 
 function App() {
   return (
@@ -13,7 +14,6 @@ function App() {
     </nav>
     <Switch>
       <Route path="/login" component={LoginPage} /> 
-      {/* New route to add*/}
     </Switch>
    </Router>
   );
