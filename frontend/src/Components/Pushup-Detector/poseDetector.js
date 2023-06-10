@@ -4,7 +4,7 @@ import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import * as poseDetection from '@tensorflow-models/pose-detection';
 
-import { drawKeypoints } from "./drawing-utilities";
+import { drawKeypoints, drawSkeleton } from "./drawing-utilities";
 
 // adapted from shamjam, harshbhatt7585 & nicknochnack smth
 
@@ -36,12 +36,19 @@ export default function PoseDetector() {
         }, refresh_rate)
     };
 
+    const invert = async () => {
+
+    }
+
     const detect = async (detector) => {
         if (
             typeof webcamRef.current !== "undefined" &&
             webcamRef.current !== null &&
             webcamRef.current.video.readyState === 4
-        ) {
+        ) { 
+            var msg = new SpeechSynthesisUtterance('Jackie is mid asf');
+            window.speechSynthesis.speak(msg);
+
             // Get video properties
             const video = webcamRef.current.video;
             const videoWidth = webcamRef.current.video.videoWidth;
@@ -60,15 +67,18 @@ export default function PoseDetector() {
             } catch(err) {
                 console.log(err);
             }
-        }
+        } 
     }
 
     const drawCanvas = async (poses, video, videoWidth, videoHeight, canvas) => {
         const ctx = canvas.current.getContext("2d");
+        ctx.translate(videoWidth, 0);
+        ctx.scale(-1,1);
         canvas.current.width = videoWidth;
         canvas.current.height = videoHeight;
 
         drawKeypoints(poses[0].keypoints, threshold, ctx);
+        drawSkeleton(poses[0].keypoints, ctx, threshold);
     }
 
     runPoseDetector();
@@ -79,6 +89,7 @@ export default function PoseDetector() {
                 <Webcam
                     ref={webcamRef}
                     muted={true}
+                    mirrored={true}
                     style={{
                         position: "absolute",
                         marginLeft: "auto",
@@ -89,7 +100,8 @@ export default function PoseDetector() {
                         zindex: 9,
                         width: 640,
                         height: 480,
-                        transform: "scaleX(-1)",
+                        //transform: "scaleX(-1)",
+                        // facingMode: "user"
                     }}
                 />
 

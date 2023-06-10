@@ -1,6 +1,5 @@
 import React from 'react'
-import pushup from '../Pushup-Detector/pushup.png'
-
+import pushup from '../../Assets/pushup.png'
 
 export default function Header() {
     const containerStyle = {
