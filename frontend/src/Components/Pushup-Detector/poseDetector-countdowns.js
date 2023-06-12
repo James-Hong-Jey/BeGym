@@ -13,13 +13,18 @@ import { checkBackStraight, checkDistance, drawKeypoints, drawSkeleton } from ".
 export default function PoseDetector() {
 
     // ADJUSTABLE VARIABLES
-    const threshold = 0.4; // Sensitivity of detections
+    const threshold = 0.5; // Sensitivity of detections
     const refresh_rate = 50; // in ms. can cause flickering
     const backStraightTolerance = 0.3 // lowkey arbitrary, 0.2 is very strict but doable in a single pose
-    let buffer = 20; // How many detect calls before it decides to change state
+    const timeLimit = 60;
 
     const [isModelLoading, setIsModelLoading] = useState(true);
     const [isFar, setIsFar] = useState(true);
+
+    const [startTime, setStartTime] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [countdown, setCountdown] = useState(3); // counts down from 3
+    const [gymCountdown, setGymCountdown] = useState(timeLimit); // counts down from 60
 
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
@@ -47,6 +52,9 @@ export default function PoseDetector() {
             webcamRef.current !== null &&
             webcamRef.current.video.readyState === 4
         ) {
+            // var msg = new SpeechSynthesisUtterance('Jackie is mid asf');
+            // window.speechSynthesis.speak(msg);
+
             // Get video properties
             const video = webcamRef.current.video;
             const videoWidth = webcamRef.current.video.videoWidth;
@@ -63,22 +71,30 @@ export default function PoseDetector() {
                 if ((poses && poses.length > 0)) {
                     setIsModelLoading(false);
                     let dist = checkDistance(poses[0].keypoints, threshold*0.75)
-                    let color = "black";
-                    if(buffer > 0){
-                        if(dist.far !== isFar) {buffer--;}
-                        else {buffer = 10;} // replenish buffer
-                    } else {
-                        setIsFar(dist.far); // consistently different
-                    }
+                    setIsFar(dist.far);
                     if (dist.far) {
+
+                        // Start countdown
+                        let interval = setInterval(() => {
+                            setCountdown((prevCountdown) => prevCountdown - 1);
+                        }, 1000)
+
+                        let gymInterval;
                         // Start drawing & detecting
-                        let right = dist.right; // 0 is left, 1 is right
-                        // if(poses[0].keypoints[9].score > 0.3) {color = "red";} else {color = "black";}
-                        if (checkBackStraight(poses[0].keypoints, threshold, backStraightTolerance, right)) { color = "green" } else { color = "red" }
-                        drawCanvas(poses, video, videoWidth, videoHeight, canvasRef, color);
-                    } else {
-                        // black lines if not in range
-                        drawCanvas(poses, video, videoWidth, videoHeight, canvasRef, color);
+                        if (countdown === 0 && gymCountdown > 0) {
+                            clearInterval(interval);
+
+                            gymInterval = setInterval(() => {
+                                setGymCountdown((prevCountdown) => prevCountdown - 1);
+                            }, 1000)
+
+                            let color = "black";
+                            let right = dist.right; // 0 is left, 1 is right
+                            // if(poses[0].keypoints[9].score > 0.3) {color = "red";} else {color = "black";}
+                            if (checkBackStraight(poses[0].keypoints, threshold, backStraightTolerance, right)) { color = "green" } else { color = "red" }
+                            drawCanvas(poses, video, videoWidth, videoHeight, canvasRef, color);
+                        }
+                        if(gymCountdown <= 0) {clearInterval(gymInterval);}
                     }
                 }
             } catch (err) {
@@ -109,6 +125,14 @@ export default function PoseDetector() {
 
                 {!isFar && !isModelLoading &&
                     (<div className="loading-overlay">Please Move Back 2 Metres</div>)}
+
+                {isFar && !isModelLoading && countdown !== 0 &&
+                    (<div className="loading-overlay">{countdown}</div>)}
+
+                {countdown === 0 && gymCountdown > 0 &&  
+                    (<div className="loading-overlay"
+                    style={{top: '90%', left: '90%'}}
+                        >{gymCountdown}</div>)}
 
                 <Webcam
                     ref={webcamRef}
