@@ -8,10 +8,10 @@ export function drawPoint(ctx, name, x, y, r, color = "red") {
     ctx.arc(x, y, r, 0, 2 * Math.PI);
     ctx.fillStyle = color;
 
-    // Add text
-    ctx.strokeSylt = color
-    ctx.font = '18px Arial'
-    ctx.fillText(name, x, y)
+    // // Add text
+    // ctx.strokeSylt = color
+    // ctx.font = '18px Arial'
+    // ctx.fillText(name, x, y)
 
     ctx.fill();
 }
@@ -102,7 +102,7 @@ export function calculateAngle(point1, vertex, point2) {
 
 // Boolean function to check if it is near the target degrees
 export function pushupAngle(keypoints, target, tolerance = 15, right = 0) {
-    const angle = calculateAngle(keypoints[c.left_wrist], keypoints[c.left_elbow + right], keypoints[c.left_shoulder]);
+    const angle = calculateAngle(keypoints[c.left_wrist + right], keypoints[c.left_elbow + right], keypoints[c.left_shoulder]);
     return (target-tolerance <= angle) && (angle <= target + tolerance);
 }
 

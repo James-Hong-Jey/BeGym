@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../App.css";
 import "./pushup.css";
 import * as tf from "@tensorflow/tfjs";
@@ -9,25 +9,50 @@ import { checkBackStraight, checkDistance, drawKeypoints, drawSkeleton, pushupAn
 
 // adapted from shamjam, harshbhatt7585 & nicknochnack smth
 
-
 export default function PoseDetector() {
 
     // ADJUSTABLE VARIABLES
     const threshold = 0.4; // Sensitivity of detections
-    const refresh_rate = 100; // in ms. can cause flickering
+    const refresh_rate = 50; // in ms. can cause flickering
     const backStraightTolerance = 0.4 // lowkey arbitrary, 0.2 is very strict but doable in a single pose
     let buffer = 20; // How many detect calls before it decides to change state
-    const pushupTolerance = 15; // How many degrees off from the target allowable
+    const pushupTolerance = 20; // How many degrees off from the target allowable
 
     const [isModelLoading, setIsModelLoading] = useState(true);
-    const [isFar, setIsFar] = useState(true);
+    const [isFar, setIsFar] = useState(false);
     const [isStraight, setIsStraight] = useState(false);
     const [pushupDown, setPushupDown] = useState(false);
-    const [pushupCount, setPushupCount] = useState(0);
-    // let pushupCount = 0;
+    const [pushupCount, setPushupCount] = useState(-1); // bug - +1s immediately upon render
+    const [pushupValid, setPushupValid] = useState(true);
+    const [lineColor, setLineColor] = useState("black");
 
-    let c_pushupCount = 0;
-    let c_down = false;
+    // update pushupCount when down -> up
+    useEffect( () => {
+        console.log("Pushup Down: " + pushupDown);
+
+        // Reached the top
+        if(!pushupDown) {
+            // increment if it was valid all the way and reached the top
+            if(pushupValid)
+                setPushupCount(prevCount => prevCount + 1);
+
+            // Regardless, resets the pushup as valid from the top
+            setPushupValid(true);
+        }
+    }, [pushupDown, pushupValid]);
+
+    // Invalidates the pushup if it ever unstraightens
+    // useEffect( () => {
+        // console.log("Back Straight?: " + isStraight);
+        // // setLineColor(isStraight ? "green" : "red");
+        // if(!isStraight) { // if not it renders at the start and is annoying
+            // setPushupValid(false);
+            // if(isFar) {
+                // var msg = new SpeechSynthesisUtterance('Straighten your back stupid');
+                // window.speechSynthesis.speak(msg);
+            // }
+        // }
+    // }, [isStraight, isFar])
 
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
@@ -72,11 +97,8 @@ export default function PoseDetector() {
                     setIsModelLoading(false);
                     let dist = checkDistance(poses[0].keypoints, threshold * 0.75)
                     let right = dist.right; // 0 is left, 1 is right
-                    let color = "black"; // will be black if invalid
+                    let color = "black";
 
-                    // setIsStraight(checkBackStraight(poses[0].keypoints, threshold, backStraightTolerance, right));
-                    const straight = checkBackStraight(poses[0].keypoints, threshold, backStraightTolerance, right);
-                    // console.log(straight);
                     // Prevents flickering between "far" and "near"
                     if (buffer > 0) {
                         if (dist.far !== isFar) { buffer--; }
@@ -85,30 +107,26 @@ export default function PoseDetector() {
                         setIsFar(dist.far); // consistently different
                     }
 
-                    if (dist.far) {
+                    if (dist.far) { // supposed to be the isFar state but it flickers so idk why
+                        const straight = checkBackStraight(poses[0].keypoints, threshold, backStraightTolerance, right);
+                        // if(!straight) setPushupValid(false);
+                        // setIsStraight(straight);
                         color = straight ? "green" : "red";
+
                         // Start drawing & detecting
                         drawCanvas(poses, video, videoWidth, videoHeight, canvasRef, color);
 
-                        if (pushupAngle(poses[0].keypoints, 90, pushupTolerance, right) && c_down === false) {
+                        // PUSHUP ALGORITHM
+                        // At bottom, sets the pushupDown state. At the top, if pushupDown is true, increments pushupCount
+                        if (pushupAngle(poses[0].keypoints, 90, pushupTolerance, right)) {
                             setPushupDown(true);
-                            c_down = true;
-                            console.log("down");
-                            console.log(c_down);
-                            console.log(c_pushupCount);
-                        } else if (pushupAngle(poses[0].keypoints, 180, pushupTolerance, right) && c_down) {
-                            // Counts as 1 pushup
+                        } else if (pushupAngle(poses[0].keypoints, 180, pushupTolerance, right) && pushupDown) {
                             setPushupDown(false);
-                            setPushupCount(prevCount => (prevCount + 1));
-                            c_down = false;
-                            c_pushupCount++;
-                            console.log("up");
-                            console.log(c_down);
-                            console.log(c_pushupCount);
+                            setPushupValid(true);
                         }
-
                     } else {
                         // black lines if not in range
+                        setLineColor("black");
                         drawCanvas(poses, video, videoWidth, videoHeight, canvasRef, color);
                     }
                 }
@@ -142,7 +160,7 @@ export default function PoseDetector() {
                     (<div className="loading-overlay">Please Move Back 2 Metres</div>)}
 
                 {isFar && !isModelLoading && (
-                    <div className="loading-overlay">{c_pushupCount}</div>
+                    <div className="loading-overlay">{pushupCount}</div>
                 )}
 
                 <Webcam
