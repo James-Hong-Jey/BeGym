@@ -82,7 +82,28 @@ export function checkDistance(keypoints, threshold = 0.3) {
             far: true
         }
     }
+}
 
+// Finds the distance between 2 points
+export function pythag(keypoint1, keypoint2) {
+    const xdiff = keypoint1.x - keypoint2.x;
+    const ydiff = keypoint1.y - keypoint2.y;
+    return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
+}
+
+// Checks the angle formed at the vertex
+export function calculateAngle(point1, vertex, point2) {
+    const a = pythag(point1, vertex);
+    const b = pythag(vertex, point2);
+    const c = pythag(point1,point2);
+
+    return Math.round(Math.acos((a*a + b*b - c*c) / (2*a*b)) * 180 / 3.1415);
+}
+
+// Boolean function to check if it is near the target degrees
+export function pushupAngle(keypoints, target, tolerance = 15, right = 0) {
+    const angle = calculateAngle(keypoints[c.left_wrist], keypoints[c.left_elbow + right], keypoints[c.left_shoulder]);
+    return (target-tolerance <= angle) && (angle <= target + tolerance);
 }
 
 // returns true if back straight, false if it exceeds threshold

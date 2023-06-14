@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../App.css";
 import "./pushup.css";
 import * as tf from "@tensorflow/tfjs";
@@ -21,10 +21,20 @@ export default function PoseDetector() {
     const [isModelLoading, setIsModelLoading] = useState(true);
     const [isFar, setIsFar] = useState(true);
 
-    const [startTime, setStartTime] = useState(0);
-    const [currentTime, setCurrentTime] = useState(0);
+    // Countdown timers
     const [countdown, setCountdown] = useState(3); // counts down from 3
     const [gymCountdown, setGymCountdown] = useState(timeLimit); // counts down from 60
+    useEffect( () => {
+        if(IsFar) {
+            const timer = setInterval( () => {
+                setCountdown((countdown)=>{
+                    if(countdown <= 0) {clearInterval(timer);}
+                    else { return countdown - 1;}
+                });
+            }, 1000)
+            return () => clearInterval(timer);
+        }
+    }, [IsFar])
 
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
