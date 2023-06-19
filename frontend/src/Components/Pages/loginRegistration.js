@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import Axios from "axios"
+import { useHistory } from 'react-router-dom';
+
 
 export default function LoginRegistration() {
+  let history = useHistory();
   const [usernameReg,SetUsernameReg] = useState('');
   const [passwordReg,SetPasswordReg] = useState('');
 
@@ -10,9 +13,9 @@ export default function LoginRegistration() {
       username: usernameReg,
       password: passwordReg, 
     }).then( (response) => {
-      console.log(response)
-    })
-  }
+      console.log(response);
+    });
+  };
 
   const [username,SetUsername] = useState('');
   const [password,SetPassword] = useState('');
@@ -24,15 +27,19 @@ export default function LoginRegistration() {
       username: username,
       password: password, 
     }).then( (response) => {
-      console.log(response.data)
-      if(response.data.message){
+      console.log(response.data);
+      if(response.data.message) {
         SetLoginStatus(response.data.message);
       } else {
-        // SetLoginStatus(response.data[0].username);
+        // SetLoginStatus(response);
         SetLoginStatus('Success!');
+        history.push('/home');
+
       }
-    })
-  }
+    });
+  };
+
+  
 
   return (
     <div>
@@ -69,9 +76,8 @@ export default function LoginRegistration() {
           onChange={(e)=>{
             SetPassword(e.target.value);
           }}
-        />
+        /> 
         <button onClick={login}>Login</button>
-
         <h1>{loginStatus}</h1>
       </div>
     </div>
