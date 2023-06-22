@@ -1,13 +1,11 @@
 import React from 'react';
 import Header from '../Archive/header';
+import PostFeed from '../Posts/postFeed';
 
-function HomePage() {
+export default function HomePage() {
     return (
         <div>
-            <Header />
-            <h2> Posts and shit</h2>
+            <PostFeed/>
         </div>
     );
 };
-
-export default HomePage;

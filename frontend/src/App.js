@@ -6,6 +6,7 @@ import LoginPage from './Components/Pages/LoginPage';
 import HomePage from "./Components/Pages/Homepage";
 import FriendsPage from "./Components/Pages/FriendsPage";
 import VideoPage from "./Components/Pages/VideoPage";
+import Post from "./Components/Posts/postPage";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
     <Switch>
       <Route exact path="/login" component={LoginPage}/>
       <Route exact path="/home" component={HomePage}/>
+      <Route exact path="/post/:id" component={Post} />
       <Route exact path="/video" component={VideoPage} />
       <Route exact path="/friends" component={FriendsPage} /> 
     </Switch>

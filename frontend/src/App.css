@@ -36,3 +36,48 @@
     transform: rotate(360deg);
   }
 }
+
+.posts {
+  width: 400px;
+  height: 100px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  border: 1px solid lightgray;
+  font-family: Helvetica, Arial, sans-serif;
+
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.posts:hover {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  cursor: pointer;
+}
+
+.posts .title {
+  flex: 20%;
+  border-bottom: 1px solid lightgray;
+  background-color: orange;
+  display: grid;
+  place-content: center;
+  color: black;
+}
+
+.posts .text {
+  flex: 60%;
+  display: grid;
+  place-content: center;
+}
+
+.posts .user {
+  flex: 20%;
+  border-top: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  padding-left: 50px;
+  background-color: orange;
+  color: black;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
