@@ -9,7 +9,7 @@ export default function LoginRegistration() {
   const [passwordReg,SetPasswordReg] = useState('');
 
   const register = () => {
-    Axios.post('http://localhost:8080/register', {
+    Axios.post('http://localhost:8080/auth', {
       username: usernameReg,
       password: passwordReg, 
     }).then( (response) => {
@@ -23,27 +23,24 @@ export default function LoginRegistration() {
   const [loginStatus,SetLoginStatus] = useState("");
 
   const login = () => {
-    Axios.post('http://localhost:8080/login', {
+    Axios.post('http://localhost:8080/auth/login', {
       username: username,
       password: password, 
     }).then( (response) => {
       console.log(response.data);
-      if(response.data.message) {
-        SetLoginStatus(response.data.message);
+      if(response.data.error) {
+        SetLoginStatus(response.data.error);
       } else {
         // SetLoginStatus(response);
-        SetLoginStatus('Success!');
-        history.push('/home');
-
+        SetLoginStatus(response.data);
+        // history.push('/home');
       }
     });
   };
 
-  
-
   return (
     <div>
-      <div className="Registration">
+      <div className="registration">
         <h1>Registration</h1>
         <label>Username</label>
         <input

@@ -15,6 +15,6 @@ export default function Header() {
         </div>
     )
 }
-            //<img src={pushup} className='headerPhoto' alt="" />
+//<img src={pushup} className='headerPhoto' alt="" />
 // source: https://hips.hearstapps.com/hmg-prod/images/mh-formcheck-index-social-1551985785.png
 //backgroundImage: 'url("./pushup.png")',

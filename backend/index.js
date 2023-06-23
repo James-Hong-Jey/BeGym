@@ -10,6 +10,10 @@ const db = require("./models");
 // Routers
 const postRouter = require('./routes/posts')
 app.use("/posts", postRouter)
+const commentRouter = require('./routes/comments')
+app.use("/comments", commentRouter)
+const userRouter = require('./routes/users')
+app.use("/auth", userRouter)
 
 db.sequelize.sync().then(()=>{
     app.listen(8080, ()=> {
@@ -19,25 +23,4 @@ db.sequelize.sync().then(()=>{
 
 app.get("/", (req, res) => {
     res.json("Hello, this is the backend!")
-})
-
-app.post('/login', (req, res) => {
-
-    const username = req.body.username;
-    const password = req.body.password;
-
-    db.query(
-        "SELECT * FROM users.login WHERE username = ? AND password = ?",
-        [username, password],
-        (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-            if (result.length > 0){
-                res.send({ username: result.username });
-            } else {
-                res.send({ message: "Wrong Username or Password!" });
-            }
-        }
-    )
 })

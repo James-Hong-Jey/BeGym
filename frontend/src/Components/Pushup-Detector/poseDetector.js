@@ -12,10 +12,10 @@ import { checkBackStraight, checkDistance, drawKeypoints, drawSkeleton, pushupAn
 export default function PoseDetector() {
 
     // ADJUSTABLE VARIABLES
-    const threshold = 0.4; // Sensitivity of detections
-    const refresh_rate = 50; // in ms. can cause flickering
+    const threshold = 0.25; // Sensitivity of detections
+    const refresh_rate = 100; // in ms. can cause flickering
     const backStraightTolerance = 0.4 // lowkey arbitrary, 0.2 is very strict but doable in a single pose
-    let buffer = 20; // How many detect calls before it decides to change state
+    let buffer = 100; // How many detect calls before it decides to change state
     const pushupTolerance = 20; // How many degrees off from the target allowable
 
     const [isModelLoading, setIsModelLoading] = useState(true);
