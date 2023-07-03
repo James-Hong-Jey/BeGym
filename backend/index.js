@@ -4,7 +4,7 @@ const app = express();
 const cors = require("cors"); // cross platform (i.e. front to back)
 app.use(express.json());
 app.use(cors());
-require('dotenv').config( {path: path.join(__ditname, '../','./env')})
+// require('dotenv').config( {path: path.join(__ditname, '../','./env')})
 
 const db = require("./models");
 
@@ -17,7 +17,7 @@ const userRouter = require('./routes/users')
 app.use("/auth", userRouter)
 
 db.sequelize.sync().then(()=>{
-    app.listen(process.env.BACKENDPORT || 8080, ()=> {
+    app.listen(8080, ()=> {
         console.log("Backend Running!")
     })
 })
