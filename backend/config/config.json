@@ -17,7 +17,8 @@
     "username": "root",
     "password": "SgigQlyvKIrf6NsjkoeJ",
     "database": "railway",
-    "host": "127.0.0.1containers-us-west-130.railway.app",
+    "host": "containers-us-west-130.railway.app",
+    "port": "7533",
     "dialect": "mysql"
   }
 }
