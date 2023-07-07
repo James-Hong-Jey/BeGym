@@ -28,17 +28,18 @@ export default function Post() {
             PostId: id,
         }, {
             headers: {
-                accessToken: sessionStorage.getItem("accessToken")
+                accessToken: localStorage.getItem("accessToken")
             }
         })
         .then( (res) => {
             if(res.data.error) {
                 console.log(res.data.error)
             } else {
+                // NOTE: OPTIMISTIC RENDERING
                 // "manually" adds the comment to the end so
                 // user doesn't have to reload to see, then clear
-                console.log("Comment Uploaded");
-                const theNewComment = {commentBody: newComment}
+                // console.log("Comment Uploaded");
+                const theNewComment = {commentBody: newComment, username: res.data.username}
                 setPostComments( [...postComments, theNewComment])
                 setNewComment("")
             }
@@ -67,7 +68,10 @@ export default function Post() {
                 <div className="commentsList">
                     {postComments.map( (comment, key) => {
                         return (
-                            <div key={key} className="comment"> {comment.commentBody} </div>
+                            <div key={key} className="comment"> 
+                                {comment.commentBody} 
+                                <label> By: {comment.username}</label>
+                            </div>
                         )
                     })}
                 </div>

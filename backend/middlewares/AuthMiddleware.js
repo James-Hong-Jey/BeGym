@@ -7,6 +7,10 @@ const validateToken = (req, res, next) => {
     if(!accessToken) return res.json({error: "User not logged in!"})
     try {
         const validToken = verify(accessToken, "secret")
+
+        // Creates a new object that can be accessed outside
+        req.user = validToken
+
         if(validToken) {
             return next()
         }
@@ -14,5 +18,4 @@ const validateToken = (req, res, next) => {
         return res.json( {error: err} )
     }
 }
-
 module.exports = { validateToken }

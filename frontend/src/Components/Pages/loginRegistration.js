@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Axios from "axios"
 import { useHistory } from 'react-router-dom';
-
+import { AuthContext } from '../../helpers/AuthContext';
 
 export default function LoginRegistration() {
   let history = useHistory();
@@ -19,8 +19,8 @@ export default function LoginRegistration() {
 
   const [username,SetUsername] = useState('');
   const [password,SetPassword] = useState('');
-
   const [loginStatus,SetLoginStatus] = useState("");
+  const {setAuthState} = useContext(AuthContext)
 
   const login = () => {
     Axios.post('http://localhost:8080/auth/login', {
@@ -33,7 +33,8 @@ export default function LoginRegistration() {
         alert(response.data.error)
       } else {
         SetLoginStatus(response.data);
-        sessionStorage.setItem("accessToken", response.data)
+        localStorage.setItem("accessToken", response.data)
+        setAuthState(true)
         history.push('/home');
       }
     });
