@@ -17,20 +17,31 @@ export default function Post() {
     useEffect( () => {
         axios.get(`http://localhost:8080/comments/${id}`).then((response) => {
             setPostComments(response.data)
+            console.log(response.data)
         })
     }, []);
 
     const addComment = () => {
-        axios.post("http://localhost:8080/comments", {
+        axios
+        .post("http://localhost:8080/comments", {
             commentBody: newComment,
-            PostId: id
-        }).then( (res) => {
-            // console.log("Comment Uploaded");
-            const theNewComment = {commentBody: newComment}
-            // "manually" adds the comment to the end so
-            // user doesn't have to reload to see, then clear
-            setPostComments( [...postComments, theNewComment])
-            setNewComment("")
+            PostId: id,
+        }, {
+            headers: {
+                accessToken: sessionStorage.getItem("accessToken")
+            }
+        })
+        .then( (res) => {
+            if(res.data.error) {
+                console.log(res.data.error)
+            } else {
+                // "manually" adds the comment to the end so
+                // user doesn't have to reload to see, then clear
+                console.log("Comment Uploaded");
+                const theNewComment = {commentBody: newComment}
+                setPostComments( [...postComments, theNewComment])
+                setNewComment("")
+            }
         })
     }
 

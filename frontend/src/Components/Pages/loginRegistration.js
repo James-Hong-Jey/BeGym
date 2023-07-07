@@ -30,10 +30,11 @@ export default function LoginRegistration() {
       console.log(response.data);
       if(response.data.error) {
         SetLoginStatus(response.data.error);
+        alert(response.data.error)
       } else {
-        // SetLoginStatus(response);
         SetLoginStatus(response.data);
-        // history.push('/home');
+        sessionStorage.setItem("accessToken", response.data)
+        history.push('/home');
       }
     });
   };
