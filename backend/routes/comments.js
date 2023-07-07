@@ -14,18 +14,16 @@ router.get('/:PostId', async (req,res) => {
     res.json(comments)
 })
 
+// only the owner of the comment can delete
+router.delete("/:commentId", validateToken, async (req,res) => {
+    const commentId = req.params.commentId
 
-// router.delete("/comments/:id", async (req,res) => {
-    // const commentId = req.params.id
-
-    // try {
-        // const deletedComment = await Comments.destroy( {
-            // where: {
-                // id: commentId
-            // }
-        // })
-    // }
-// })
+    const deletedComment = await Comments.destroy( {
+        where: {
+            id: commentId
+        }
+    })
+})
 
 router.post("/", validateToken, async (req,res) => {
     const comment = req.body

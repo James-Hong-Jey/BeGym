@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios";
 import { useParams } from "react-router-dom"
+import { AuthContext } from "../../helpers/AuthContext";
 
 export default function Post() {
     let { id } = useParams();
     const [postObj, setPostObj] = useState({})
     const [postComments, setPostComments] = useState([])
     const [newComment, setNewComment] = useState("")
+    const {authState} = useContext(AuthContext)
 
     useEffect( () => {
         axios.get(`http://localhost:8080/posts/postID/${id}`).then((response) => {
@@ -70,7 +72,7 @@ export default function Post() {
                         return (
                             <div key={key} className="comment"> 
                                 {comment.commentBody} 
-                                <label> By: {comment.username}</label>
+                                <div> By: {comment.username}</div>
                             </div>
                         )
                     })}
@@ -78,5 +80,7 @@ export default function Post() {
             </div>
         </div>
     )
-
 }
+                                // {authState.username == comment.username && (
+                                    // <button>Delete</button>
+                                // )}

@@ -34,7 +34,11 @@ export default function LoginRegistration() {
       } else {
         SetLoginStatus(response.data);
         localStorage.setItem("accessToken", response.data)
-        setAuthState(true)
+//         setAuthState({
+          // username: response.data.user,
+          // id: response.data.id,
+          // status: true,
+        // })
         history.push('/home');
       }
     });
