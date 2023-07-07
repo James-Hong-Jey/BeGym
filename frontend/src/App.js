@@ -36,7 +36,11 @@ function App() {
   // let history = useHistory();
   const logout = () => {
     localStorage.removeItem("accessToken")
-    setAuthState(false)
+    setAuthState({
+      username: "",
+      id: 0,
+      status: false
+    })
     //history.push('/login');
   }
 
@@ -46,7 +50,7 @@ function App() {
         <Router>
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <img src={pushup} width="70" height="70" className='headerPhoto' />
-            {!authState ? (
+            {!authState.status ? (
               <Link to={'/login'} className="nav-link"> <button>Login Page</button> </Link>
             ) : (
               <>
@@ -55,7 +59,6 @@ function App() {
                 <button onClick={logout}>Log Out</button>
               </>
             )}
-            <h1>{authState.status && authState.username}</h1>
           </nav>
           <Switch>
             <Route exact path="/login" component={LoginPage} />

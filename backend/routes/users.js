@@ -30,12 +30,12 @@ router.post("/login", async(req,res) => {
 
         const accessToken = sign({ username: user.username, id: user.id }, "secret")
         // return res.json("Successful Login")
-        return res.json(accessToken)
-//         res.json({
-            // token: accessToken,
-            // username: username,
-            // id: user.id
-        // })
+        // return res.json(accessToken)
+        res.json({
+            token: accessToken,
+            username: username,
+            id: user.id
+        })
     })
 })
 

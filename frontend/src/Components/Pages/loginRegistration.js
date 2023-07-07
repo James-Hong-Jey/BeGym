@@ -27,18 +27,16 @@ export default function LoginRegistration() {
       username: username,
       password: password, 
     }).then( (response) => {
-      console.log(response.data);
       if(response.data.error) {
         SetLoginStatus(response.data.error);
         alert(response.data.error)
       } else {
-        SetLoginStatus(response.data);
-        localStorage.setItem("accessToken", response.data)
-//         setAuthState({
-          // username: response.data.user,
-          // id: response.data.id,
-          // status: true,
-        // })
+        localStorage.setItem("accessToken", response.data.token)
+        setAuthState({
+          username: response.data.username,
+          id: response.data.id,
+          status: true,
+        })
         history.push('/home');
       }
     });
