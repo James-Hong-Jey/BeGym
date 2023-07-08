@@ -57,6 +57,7 @@ function App() {
                 <Link to={'/home'} className="nav-link"> <button>Post Feed</button> </Link>
                 <Link to={'/video'} className="nav-link"> <button>My Gym</button> </Link>
                 <button onClick={logout}>Log Out</button>
+                {authState.username}
               </>
             )}
           </nav>

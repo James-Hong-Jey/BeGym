@@ -48,6 +48,19 @@ export default function Post() {
         })
     }
 
+    const deleteComment = (id) => {
+        console.log("Trying to delete comment")
+        axios.delete(`http://localhost:8080/comments/${id}`, {
+            headers: {accessToken: localStorage.getItem('accessToken')}
+        })
+        .then( () => {
+            //alert("Comment Deleted")
+            postComments.filter( (val) => {
+                return val.id != id
+            })
+        })
+    }
+
     return (
         <div className="postPage"> 
             <div className="leftSide">
@@ -73,6 +86,9 @@ export default function Post() {
                             <div key={key} className="comment"> 
                                 {comment.commentBody} 
                                 <div> By: {comment.username}</div>
+                                {(authState.username === comment.username || authState.username === postObj.user) && (
+                                    <button onClick={() => {deleteComment(comment.id)}}>Delete</button>
+                                )}
                             </div>
                         )
                     })}
@@ -81,6 +97,3 @@ export default function Post() {
         </div>
     )
 }
-                                // {authState.username == comment.username && (
-                                    // <button>Delete</button>
-                                // )}

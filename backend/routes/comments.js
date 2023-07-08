@@ -23,6 +23,7 @@ router.delete("/:commentId", validateToken, async (req,res) => {
             id: commentId
         }
     })
+    res.json("Comment Deleted")
 })
 
 router.post("/", validateToken, async (req,res) => {
