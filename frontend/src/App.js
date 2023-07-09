@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 // Only compatible with react-router-dom v5.2 so using Switch instead of Routes
 import './App.css';
 import LoginPage from './Components/Pages/LoginPage';
 import HomePage from "./Components/Pages/Homepage";
 // import FriendsPage from "./Components/Pages/FriendsPage";
 import VideoPage from "./Components/Pages/VideoPage";
+import PageNotFound from "./Components/Pages/PageNotFound";
 import Post from "./Components/Posts/postPage";
 import pushup from "./Assets/chopper.png"
 import { AuthContext } from './helpers/AuthContext'
@@ -66,6 +67,7 @@ function App() {
             <Route exact path="/home" component={HomePage} />
             <Route exact path="/post/:id" component={Post} />
             <Route exact path="/video" component={VideoPage} />
+            <Route exact path="*" component={PageNotFound} />
           </Switch>
         </Router>
       </AuthContext.Provider>
