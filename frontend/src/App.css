@@ -166,6 +166,14 @@ a {
   flex-direction: column;
 }
 
+.like {
+  flex: 50%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: right;
+  gap: 20px
+}
+
 .containerInput {
   flex: 20%;
   width: 100%;

@@ -1,13 +1,13 @@
 // remember to async / await whenever u sequelize
 const express = require('express')
 const router = express.Router()
-const { Posts } = require('../models')
+const { Posts, Likes } = require('../models')
 const { validateToken } = require('../middlewares/AuthMiddleware')
 
-router.get("/", async (req,res) => {
-    // res.send("Connected to posts")
-    const postsList = await Posts.findAll()
-    res.json(postsList)
+router.get("/", validateToken, async (req,res) => {
+    const postsList = await Posts.findAll({include: [Likes]})
+    const likedPosts = await Likes.findAll({where: {UserId: req.user.id}})
+    res.json({postsList: postsList, likedPosts: likedPosts})
 })
 
 router.get('/postID/:id', async (req,res) => {
