@@ -9,7 +9,8 @@ export default function PostFeed() {
     const history = useHistory()
 
     useEffect( () => {
-        axios.get("http://localhost:8080/posts").then((response) => {
+        // axios.get("http://localhost:8080/posts").then((response) => {
+        axios.get("https://begym-production.up.railway.app/posts").then((response) => {
             // console.log(response.data);
             setPostsList(response.data);
         })

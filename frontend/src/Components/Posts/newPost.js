@@ -7,7 +7,9 @@ export default function NewPost() {
     const [user, setUser] = useState("")
 
     const addPost = () => {
-        axios.post("http://localhost:8080/posts", {
+        // axios.post("http://localhost:8080/posts", {
+        axios.post("https://begym-production.up.railway.app/posts", {
+
             title: title,
             text: text,
             user: user

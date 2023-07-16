@@ -9,19 +9,19 @@ export default function Post() {
     const [newComment, setNewComment] = useState("")
 
     useEffect( () => {
-        axios.get(`http://localhost:8080/posts/postID/${id}`).then((response) => {
+        axios.get(`https://begym-production.up.railway.app/posts/postID/${id}`).then((response) => {
             setPostObj(response.data)
         })
     }, []);
 
     useEffect( () => {
-        axios.get(`http://localhost:8080/comments/${id}`).then((response) => {
+        axios.get(`https://begym-production.up.railway.app/comments/${id}`).then((response) => {
             setPostComments(response.data)
         })
     }, []);
 
     const addComment = () => {
-        axios.post("http://localhost:8080/comments", {
+        axios.post("https://begym-production.up.railway.app/comments", {
             commentBody: newComment,
             PostId: id
         }).then( (res) => {

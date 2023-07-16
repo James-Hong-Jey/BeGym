@@ -9,7 +9,7 @@ export default function LoginRegistration() {
   const [passwordReg,SetPasswordReg] = useState('');
 
   const register = () => {
-    Axios.post('http://localhost:8080/auth', {
+    Axios.post('https://begym-production.up.railway.app/auth', {
       username: usernameReg,
       password: passwordReg, 
     }).then( (response) => {
@@ -23,7 +23,7 @@ export default function LoginRegistration() {
   const [loginStatus,SetLoginStatus] = useState("");
 
   const login = () => {
-    Axios.post('http://localhost:8080/auth/login', {
+    Axios.post('https://begym-production.up.railway.app/auth/login', {
       username: username,
       password: password, 
     }).then( (response) => {
