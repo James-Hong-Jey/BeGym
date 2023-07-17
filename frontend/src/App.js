@@ -51,7 +51,10 @@ function App() {
           <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <img src={pushup} width="70" height="70" className='headerPhoto' />
             {!authState.status ? (
+              <>
               <Link to={'/login'} className="nav-link"> <button>Login Page</button> </Link>
+              <Link to={'/video'} className="nav-link"> <button>TEST</button> </Link>
+              </>
             ) : (
               <>
                 <Link to={'/home'} className="nav-link"> <button>Post Feed</button> </Link>

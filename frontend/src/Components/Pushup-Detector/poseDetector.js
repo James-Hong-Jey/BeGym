@@ -10,6 +10,7 @@ import NewPost from "../Posts/newPost";
 
 // adapted from shamjam, harshbhatt7585 & nicknochnack smth
 let flag = false
+let pause = false
 
 export default function PoseDetector() {
 
@@ -32,6 +33,7 @@ export default function PoseDetector() {
     const [startingTime, setStartingTime] = useState(0)
     const [currentTime, setCurrentTime] = useState(0)
     const [poseTime, setPoseTime] = useState(0)
+    const [pauseTime, setPauseTime] = useState(0)
 
     const reset = () => {
         flag = false;
@@ -39,6 +41,9 @@ export default function PoseDetector() {
         setStartingTime(0);
         setCurrentTime(0);
         setPoseTime(0);
+        setIsFar(true);
+        setIsModelLoading(true);
+        setPushupDown(false);
     }
 
     useEffect(() => {
@@ -49,9 +54,12 @@ export default function PoseDetector() {
         const timeDiff = (currentTime - startingTime) / 1000
         if (poseTime > maxDuration) {
             // Play a sound? But putting it here will play it alot
-        } else if (flag) setPoseTime(timeDiff);
+        } else if (flag) { 
+            if (pause) {setPauseTime(timeDiff - poseTime);}
+            else {setPoseTime(timeDiff - pauseTime);}
+        }
         // console.log("start: " + startingTime + " current: " + currentTime + " diff: " + poseTime)
-    }, [currentTime])
+    }, [currentTime, startingTime])
 
     // update pushupCount when down -> up
     useEffect(() => {
@@ -133,15 +141,19 @@ export default function PoseDetector() {
                     } else {
                         setIsFar(dist.far); // consistently different
                     }
+                    
+                    setCurrentTime(new Date(Date()).getTime());
 
                     if (dist.far) { // supposed to be the isFar state but it flickers so idk why
 
+                        pause = false;
                         // Timer functions
                         if (!flag) {
+                            // Start 
+                            // setStartingTime(currentTime - poseTime);
                             setStartingTime(new Date(Date()).getTime());
                             flag = true;
-                        }
-                        setCurrentTime(new Date(Date()).getTime());
+                        } 
 
                         const straight = checkBackStraight(poses[0].keypoints, threshold, backStraightTolerance, right);
                         // if(!straight) setPushupValid(false);
@@ -163,6 +175,7 @@ export default function PoseDetector() {
                         // black lines if not in range
                         setLineColor("black");
                         drawCanvas(poses, video, videoWidth, videoHeight, canvasRef, color);
+                        pause = true;
                     }
                 }
             } catch (err) {

@@ -59,8 +59,8 @@ export default function PostFeed() {
                     <div className="posts" >
                         <div className="title" onClick={() => { history.push(`/post/${value.id}`) }}> {value.title} </div>
                         <div className="user">
-                            {value.user}{" "}
-                            <div className="like">
+                            <div className="user-username"> {value.user}{" "}</div>
+                            <div className="likecontainer">
                                 {!likedPosts.includes(value.id) ?
                                     <ThumbUpIcon className="like"
                                         onClick={() => {
