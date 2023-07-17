@@ -11,6 +11,7 @@ import NewPost from "../Posts/newPost";
 // adapted from shamjam, harshbhatt7585 & nicknochnack smth
 let flag = false
 let pause = false
+let ended = false
 
 export default function PoseDetector() {
 
@@ -20,7 +21,7 @@ export default function PoseDetector() {
     const backStraightTolerance = 0.4 // lowkey arbitrary, 0.2 is very strict but doable in a single pose
     let buffer = 10; // How many detect calls before it decides to change state
     const pushupTolerance = 20; // How many degrees off from the target allowable
-    const maxDuration = 60;
+    const maxDuration = 6;
 
     const [isModelLoading, setIsModelLoading] = useState(true);
     const [isFar, setIsFar] = useState(false);
@@ -54,6 +55,7 @@ export default function PoseDetector() {
         const timeDiff = (currentTime - startingTime) / 1000
         if (poseTime > maxDuration) {
             // Play a sound? But putting it here will play it alot
+            ended = true;
         } else if (flag) { 
             if (pause) {setPauseTime(timeDiff - poseTime);}
             else {setPoseTime(timeDiff - pauseTime);}
@@ -113,7 +115,8 @@ export default function PoseDetector() {
         if (
             typeof webcamRef.current !== "undefined" &&
             webcamRef.current !== null &&
-            webcamRef.current.video.readyState === 4
+            webcamRef.current.video.readyState === 4 && 
+            !ended
         ) {
             // Get video properties
             const video = webcamRef.current.video;
@@ -185,6 +188,7 @@ export default function PoseDetector() {
     }
 
     const drawCanvas = async (poses, video, videoWidth, videoHeight, canvas, color) => {
+        if (poseTime <= maxDuration - 1){
         const ctx = canvas.current.getContext("2d");
         ctx.translate(videoWidth, 0);
         ctx.scale(-1, 1);
@@ -193,6 +197,9 @@ export default function PoseDetector() {
 
         drawKeypoints(poses[0].keypoints, threshold, ctx);
         drawSkeleton(poses[0].keypoints, ctx, threshold, color);
+        } else {
+            return;
+        }
     }
 
     runPoseDetector();
@@ -250,7 +257,7 @@ export default function PoseDetector() {
             ) : (
                 <>
                     <h1>Time's Up!</h1>
-                    <NewPost pushups={pushupCount} />
+                    <NewPost />
                     <button onClick={() => {reset()}}>Try Again</button>
                 </>
             )}

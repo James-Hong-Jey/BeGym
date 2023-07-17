@@ -7,9 +7,11 @@ export default function LoginRegistration() {
   let history = useHistory();
   const [usernameReg, SetUsernameReg] = useState('');
   const [passwordReg, SetPasswordReg] = useState('');
+  
+  const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
 
   const register = () => {
-    Axios.post('http://localhost:8080/auth', {
+    Axios.post(`${baseUrl}/auth`, {
       username: usernameReg,
       password: passwordReg,
     }).then((response) => {
@@ -29,7 +31,7 @@ export default function LoginRegistration() {
   const { setAuthState } = useContext(AuthContext)
 
   const login = () => {
-    Axios.post('http://localhost:8080/auth/login', {
+    Axios.post(`${baseUrl}/auth/login`, {
       username: username,
       password: password,
     }).then((response) => {

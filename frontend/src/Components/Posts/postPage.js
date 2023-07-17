@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { AuthContext } from "../../helpers/AuthContext";
 
 export default function Post() {
+    const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
     let { id } = useParams();
     const [postObj, setPostObj] = useState({})
     const [postComments, setPostComments] = useState([])
@@ -11,13 +12,13 @@ export default function Post() {
     const {authState} = useContext(AuthContext)
 
     useEffect( () => {
-        axios.get(`http://localhost:8080/posts/postID/${id}`).then((response) => {
+        axios.get(`${baseUrl}/posts/postID/${id}`).then((response) => {
             setPostObj(response.data)
         })
     }, []);
 
     useEffect( () => {
-        axios.get(`http://localhost:8080/comments/${id}`).then((response) => {
+        axios.get(`${baseUrl}/comments/${id}`).then((response) => {
             setPostComments(response.data)
             console.log(response.data)
         })
@@ -25,7 +26,7 @@ export default function Post() {
 
     const addComment = () => {
         axios
-        .post("http://localhost:8080/comments", {
+        .post(`${baseUrl}/comments`, {
             commentBody: newComment,
             PostId: id,
         }, {
@@ -85,7 +86,7 @@ export default function Post() {
                         return (
                             <div key={key} className="comment"> 
                                 {comment.commentBody} 
-                                <div> By: {comment.username}</div>
+                                <div> By: {comment.username}</div>                                
                                 {(authState.username === comment.username || authState.username === postObj.user) && (
                                     <button onClick={() => {deleteComment(comment.id)}}>Delete</button>
                                 )}
@@ -97,3 +98,7 @@ export default function Post() {
         </div>
     )
 }
+/*
+
+
+                                */

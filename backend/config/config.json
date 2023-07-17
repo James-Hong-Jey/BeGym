@@ -13,12 +13,22 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "production": {
+  "railway": {
     "username": "root",
     "password": "SgigQlyvKIrf6NsjkoeJ",
     "database": "railway",
     "host": "containers-us-west-130.railway.app",
     "port": "7533",
     "dialect": "mysql"
+  },
+  "azure": {
+    "host": "begym.mysql.database.azure.com",
+    "username": "jameshong8387",
+    "password": "JackieNeo1",
+    "database": "users",
+    "dialect": "mysql",
+    "ssl": {
+      "ca": "fs.readFileSync('./DigiCertGlobalRootCA.crt.pem')"
+    }
   }
 }

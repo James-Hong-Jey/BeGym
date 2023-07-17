@@ -7,13 +7,13 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 export default function PostFeed() {
-
+    const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
     const [postsList, setPostsList] = useState([]);
     const [likedPosts, setLikedPosts] = useState([]);
     const history = useHistory()
 
     useEffect(() => {
-        axios.get("http://localhost:8080/posts",
+        axios.get(`${baseUrl}/posts`,
             { headers: { accessToken: localStorage.getItem("accessToken") } }
         ).then((response) => {
             setPostsList(response.data.postsList);
@@ -24,7 +24,7 @@ export default function PostFeed() {
     }, [])
 
     const likePost = (id) => {
-        axios.post("http://localhost:8080/likes",
+        axios.post(`${baseUrl}/likes`,
             { PostId: id },
             { headers: { accessToken: localStorage.getItem("accessToken") } })
             .then((response) => {

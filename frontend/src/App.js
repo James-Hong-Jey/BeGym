@@ -13,6 +13,8 @@ import axios from "axios";
 
 function App() {
 
+  const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
+
   const [authState, setAuthState] = useState({
     username: "",
     id: 0,
@@ -20,7 +22,7 @@ function App() {
   })
 
   useEffect( () => {
-    axios.get('http://localhost:8080/auth/auth').then((response) => {
+    axios.get(`${baseUrl}/auth/auth`).then((response) => {
       if(response.data.error){
         setAuthState({...authState, status: false})
       } else {

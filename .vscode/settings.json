@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/272b455d-4739-4f28-9a0b-e189ea09efca/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/begym",
+    "appService.deploySubpath": "backend"
+}

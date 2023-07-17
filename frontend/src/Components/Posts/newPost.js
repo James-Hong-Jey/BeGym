@@ -1,24 +1,20 @@
 import { useState, useContext } from "react"
 import axios from "axios";
 import { AuthContext } from "../../helpers/AuthContext";
-import PoseDetector from "../Pushup-Detector/poseDetector";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
 export default function NewPost(props) {
-    const [title, setTitle] = useState("")
+    const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
     const [text, setText] = useState("")
-    const [user, setUser] = useState("")
     const {authState} = useContext(AuthContext)
     let history = useHistory()
 
     const addPost = () => {
-        axios.post("http://localhost:8080/posts", {
+        axios.post(`${baseUrl}/posts`, {
             title: props.pushups,
             text: text,
-            // user: user
             user: authState.username
         }).then( (res) => {
-            // console.log("Post Uploaded");
             alert("Post Uploaded")
             history.push("/home")
         })
