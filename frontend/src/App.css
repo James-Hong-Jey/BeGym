@@ -73,6 +73,7 @@ a {
   height: 40px;
   cursor: pointer;
   margin-right: 10px;
+  margin-left: 10px;
   background-color: white;
 }
 
@@ -102,6 +103,9 @@ a {
 }
 
 .posts .title {
+  font-size: 60px;
+  font-style:initial;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   flex: 20%;
   border-bottom: 1px solid lightgray;
   background-color: orange;
@@ -117,15 +121,35 @@ a {
 }
 
 .posts .user {
-  flex: 20%;
+  flex: 10%;
+  font-size: 30px;
   border-top: 1px solid lightgray;
   display: flex;
   align-items: center;
-  padding-left: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
   background-color: orange;
   color: black;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+.user .user-username {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 20px;
+  flex: 30%;
+}
+
+.likescontainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex: 30%;
+}
+
+.likescontainer .like {
+  margin-left: 20px;
 }
 
 #individual {
@@ -156,6 +180,14 @@ a {
   place-items: center;
 }
 
+.leftSide .title {
+  font-size: 30px;
+}
+
+.leftSide .user {
+  font-size: 20px;
+}
+
 .rightSide {
   flex: 50%;
   height: calc(100vh - 70px);
@@ -176,10 +208,16 @@ a {
   border-radius: 8px;
 }
 
-.containerInput input,
+.containerInput input {
+  width: 400px;
+  height: 200px;
+  border-radius: 8px;
+  border: black;
+}
+
 button {
-  width: 500px;
-  height: 50px;
+  width: 120px;
+  height: 40px;
   border-radius: 8px;
   border: black;
 }
@@ -204,4 +242,21 @@ button {
   border: 1px solid lightgray;
   border-radius: 5px;
   margin-top: 20px;
+}
+
+.login label, .login input, .login button {
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.logout {
+  flex: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  top: 20px;
+  right: 20px;
+  gap: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
 }

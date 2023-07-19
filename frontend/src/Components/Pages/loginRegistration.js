@@ -1,82 +1,98 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Axios from "axios"
 import { useHistory } from 'react-router-dom';
-
+import { AuthContext } from '../../helpers/AuthContext';
 
 export default function LoginRegistration() {
   let history = useHistory();
-  const [usernameReg,SetUsernameReg] = useState('');
-  const [passwordReg,SetPasswordReg] = useState('');
+  const [usernameReg, SetUsernameReg] = useState('');
+  const [passwordReg, SetPasswordReg] = useState('');
+  
+  const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
 
   const register = () => {
-    Axios.post('https://begym-production.up.railway.app/auth', {
+    Axios.post(`${baseUrl}/auth`, {
       username: usernameReg,
-      password: passwordReg, 
-    }).then( (response) => {
-      console.log(response);
+      password: passwordReg,
+    }).then((response) => {
+      if (response.data.error) {
+        SetLoginStatus(response.data.error);
+        alert(response.data.error)
+      } else {
+        SetLoginStatus(response.data);
+        alert(response.data)
+      }
     });
   };
 
-  const [username,SetUsername] = useState('');
-  const [password,SetPassword] = useState('');
-
-  const [loginStatus,SetLoginStatus] = useState("");
+  const [username, SetUsername] = useState('');
+  const [password, SetPassword] = useState('');
+  const [loginStatus, SetLoginStatus] = useState("");
+  const { setAuthState } = useContext(AuthContext)
 
   const login = () => {
-    Axios.post('https://begym-production.up.railway.app/auth/login', {
+    Axios.post(`${baseUrl}/auth/login`, {
       username: username,
-      password: password, 
-    }).then( (response) => {
-      console.log(response.data);
-      if(response.data.error) {
+      password: password,
+    }).then((response) => {
+      if (response.data.error) {
         SetLoginStatus(response.data.error);
+        alert(response.data.error)
       } else {
-        // SetLoginStatus(response);
-        SetLoginStatus(response.data);
-        // history.push('/home');
+        localStorage.setItem("accessToken", response.data.token)
+        setAuthState({
+          username: response.data.username,
+          id: response.data.id,
+          status: true,
+        })
+        history.push('/home');
       }
     });
   };
 
   return (
-    <div>
-      <div className="registration">
-        <h1>Registration</h1>
+    <div className='login'>
+      <h1>Registration</h1>
+      <div>
         <label>Username</label>
         <input
           type="text"
-          onChange={(e)=>{
+          onChange={(e) => {
             SetUsernameReg(e.target.value);
           }}
         />
+      </div>
+      <div>
         <label>Password</label>
         <input
-          type="text"
-          onChange={(e)=>{
+          type="password"
+          onChange={(e) => {
             SetPasswordReg(e.target.value);
           }}
         />
-        <button onClick={register}>Register</button>
       </div>
-      <div className="Login">
+      <button onClick={register}>Register</button>
+      <div>
         <h1>Login</h1>
         <label>Username</label>
         <input
           type="text"
-          onChange={(e)=>{
+          onChange={(e) => {
             SetUsername(e.target.value);
           }}
         />
+      </div>
+      <div>
         <label>Password</label>
         <input
-          type="text"
-          onChange={(e)=>{
+          type="password"
+          onChange={(e) => {
             SetPassword(e.target.value);
           }}
-        /> 
-        <button onClick={login}>Login</button>
-        <h1>{loginStatus}</h1>
+        />
       </div>
+      <button onClick={login}>Login</button>
+      <h1>{loginStatus}</h1>
     </div>
   )
 };

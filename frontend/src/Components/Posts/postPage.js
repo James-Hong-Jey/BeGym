@@ -1,36 +1,64 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios";
 import { useParams } from "react-router-dom"
+import { AuthContext } from "../../helpers/AuthContext";
 
 export default function Post() {
+    const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
     let { id } = useParams();
     const [postObj, setPostObj] = useState({})
     const [postComments, setPostComments] = useState([])
     const [newComment, setNewComment] = useState("")
+    const {authState} = useContext(AuthContext)
 
     useEffect( () => {
-        axios.get(`https://begym-production.up.railway.app/posts/postID/${id}`).then((response) => {
+        axios.get(`${baseUrl}/posts/postID/${id}`).then((response) => {
             setPostObj(response.data)
         })
     }, []);
 
     useEffect( () => {
-        axios.get(`https://begym-production.up.railway.app/comments/${id}`).then((response) => {
+        axios.get(`${baseUrl}/comments/${id}`).then((response) => {
             setPostComments(response.data)
+            console.log(response.data)
         })
     }, []);
 
     const addComment = () => {
-        axios.post("https://begym-production.up.railway.app/comments", {
+        axios
+        .post(`${baseUrl}/comments`, {
             commentBody: newComment,
-            PostId: id
-        }).then( (res) => {
-            // console.log("Comment Uploaded");
-            const theNewComment = {commentBody: newComment}
-            // "manually" adds the comment to the end so
-            // user doesn't have to reload to see, then clear
-            setPostComments( [...postComments, theNewComment])
-            setNewComment("")
+            PostId: id,
+        }, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken")
+            }
+        })
+        .then( (res) => {
+            if(res.data.error) {
+                console.log(res.data.error)
+            } else {
+                // NOTE: OPTIMISTIC RENDERING
+                // "manually" adds the comment to the end so
+                // user doesn't have to reload to see, then clear
+                // console.log("Comment Uploaded");
+                const theNewComment = {commentBody: newComment, username: res.data.username}
+                setPostComments( [...postComments, theNewComment])
+                setNewComment("")
+            }
+        })
+    }
+
+    const deleteComment = (id) => {
+        console.log("Trying to delete comment")
+        axios.delete(`http://localhost:8080/comments/${id}`, {
+            headers: {accessToken: localStorage.getItem('accessToken')}
+        })
+        .then( () => {
+            //alert("Comment Deleted")
+            postComments.filter( (val) => {
+                return val.id != id
+            })
         })
     }
 
@@ -56,12 +84,21 @@ export default function Post() {
                 <div className="commentsList">
                     {postComments.map( (comment, key) => {
                         return (
-                            <div key={key} className="comment"> {comment.commentBody} </div>
+                            <div key={key} className="comment"> 
+                                {comment.commentBody} 
+                                <div> By: {comment.username}</div>                                
+                                {(authState.username === comment.username || authState.username === postObj.user) && (
+                                    <button onClick={() => {deleteComment(comment.id)}}>Delete</button>
+                                )}
+                            </div>
                         )
                     })}
                 </div>
             </div>
         </div>
     )
-
 }
+/*
+
+
+                                */

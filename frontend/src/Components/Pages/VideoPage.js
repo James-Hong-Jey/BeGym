@@ -6,9 +6,7 @@ import NewPost from '../Posts/newPost';
 function VideoPage()  {
     return (
         <div>
-            <Header />
             <PoseDetector />
-            <NewPost />
         </div>
     );
 };

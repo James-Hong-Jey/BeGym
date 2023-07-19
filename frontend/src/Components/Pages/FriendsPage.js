@@ -9,7 +9,6 @@ function FriendsPage({ authorized }) {
     return (
         <div>
             <Header />
-            <h2> friends to add yuh</h2>
         </div>
     );
 };
