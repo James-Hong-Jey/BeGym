@@ -21,7 +21,7 @@ export default function PoseDetector() {
     const backStraightTolerance = 0.4 // lowkey arbitrary, 0.2 is very strict but doable in a single pose
     let buffer = 10; // How many detect calls before it decides to change state
     const pushupTolerance = 20; // How many degrees off from the target allowable
-    const maxDuration = 6;
+    const maxDuration = 60;
 
     const [isModelLoading, setIsModelLoading] = useState(true);
     const [isFar, setIsFar] = useState(false);
@@ -168,7 +168,7 @@ export default function PoseDetector() {
 
                         // PUSHUP ALGORITHM
                         // At bottom, sets the pushupDown state. At the top, if pushupDown is true, increments pushupCount
-                        if (pushupAngle(poses[0].keypoints, 90, pushupTolerance, right)) {
+                        if (pushupAngle(poses[0].keypoints, 100, pushupTolerance, right)) {
                             setPushupDown(true);
                         } else if (pushupAngle(poses[0].keypoints, 180, pushupTolerance, right) && pushupDown) {
                             setPushupDown(false);
