@@ -188,7 +188,7 @@ export default function PoseDetector() {
     }
 
     const drawCanvas = async (poses, video, videoWidth, videoHeight, canvas, color) => {
-        if (poseTime <= maxDuration - 1){
+        if (canvas.current != null){
         const ctx = canvas.current.getContext("2d");
         ctx.translate(videoWidth, 0);
         ctx.scale(-1, 1);
@@ -257,7 +257,7 @@ export default function PoseDetector() {
             ) : (
                 <>
                     <h1>Time's Up!</h1>
-                    <NewPost />
+                    <NewPost pushups={pushupCount}/>
                     <button onClick={() => {reset()}}>Try Again</button>
                 </>
             )}

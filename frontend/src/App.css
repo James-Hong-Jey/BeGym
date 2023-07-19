@@ -208,7 +208,13 @@ a {
   border-radius: 8px;
 }
 
-.containerInput input,
+.containerInput input {
+  width: 400px;
+  height: 200px;
+  border-radius: 8px;
+  border: black;
+}
+
 button {
   width: 120px;
   height: 40px;

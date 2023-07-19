@@ -27,6 +27,7 @@ export default function NewPost(props) {
                 <input 
                     style={{
                         height: "200px",
+                        width: "400px"
                     }}
                     type="text" 
                     placeholder="Any Thoughts?" 

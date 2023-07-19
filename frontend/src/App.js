@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 // Only compatible with react-router-dom v5.2 so using Switch instead of Routes
 import './App.css';
 import LoginPage from './Components/Pages/LoginPage';
@@ -14,6 +15,7 @@ import axios from "axios";
 function App() {
 
   const baseUrl = process.env.REACT_APP_BASE_URL || 'http:/localhost:8080';
+  let history = useHistory();
 
   const [authState, setAuthState] = useState({
     username: "",
@@ -35,7 +37,6 @@ function App() {
     })
   }, [])
 
-  // let history = useHistory();
   const logout = () => {
     localStorage.removeItem("accessToken")
     setAuthState({
@@ -43,7 +44,7 @@ function App() {
       id: 0,
       status: false
     })
-    //history.push('/login');
+    // history.push('/login');
   }
 
   return (
@@ -62,7 +63,7 @@ function App() {
                 <Link to={'/home'} className="nav-link"> <button>Post Feed</button> </Link>
                 <Link to={'/video'} className="nav-link"> <button>My Gym</button> </Link>
                 <div className="logout">
-                  <button>Log Out</button>
+                  <button onClick={()=>logout()}>Log Out</button>
                   <label>{authState.username}</label>
                 </div>
               </>
