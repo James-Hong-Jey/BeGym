@@ -11,6 +11,7 @@ import Post from "./Components/Posts/postPage";
 import pushup from "./Assets/chopper.png"
 import { AuthContext } from './helpers/AuthContext'
 import axios from "axios";
+import ProfilePage from "./Components/Pages/ProfilePage";
 
 function App() {
 
@@ -67,6 +68,7 @@ function App() {
             <Route exact path="/home" component={HomePage} />
             <Route exact path="/post/:id" component={Post} />
             <Route exact path="/video" component={VideoPage} />
+            <Route exact path="/profile/:id" component={ProfilePage} />
             <Route exact path="*" component={PageNotFound} />
           </Switch>
         </Router>
