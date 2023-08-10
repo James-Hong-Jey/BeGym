@@ -1,10 +1,15 @@
 # BeGym-5482
 Orbital Project to create a Social Media Web App that can detect pushups through your webcam.
 
-# Prerequisites
+# Try it out
+https://begym-ms3.netlify.app/
+
+# Build from source instructions:
+
+## Prerequisites
 A MySQL server is required for some features, but the pushup detector does not require it
 
-# Instructions
+## Instructions
 1. Create MySQL server and configure your settings, username, schema name and password under BeGym/backend/config/config.json in the first object
 2. cd into BeGym/backend
 3. run "npm start"
@@ -14,10 +19,11 @@ A MySQL server is required for some features, but the pushup detector does not r
 7. Frontend should be running on 3000
 8. Open localhost:3000 and attempt the various features
 
-# Instructions for Pushup Detector
+## Instructions for Pushup Detector
 1. You can configure some global tolerances (i.e. detection tolerance, back straight tolerance, etc) under BeGym/frontend/Components/Pushup-Detector/poseDetector.js
 2. Navigate to "My Gym" on localhost:3000
 3. Ensure that all 4 limbs are visible once the detector loads
 4. Ensure that your arms are at a strict 90 degrees when they're down (your arms are typically at a greater angle)
 
+# Contact Us
 Message @jeysiao on telegram for questions and suggestions and help (will be greatly apprecated)
