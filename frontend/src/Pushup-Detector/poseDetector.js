@@ -4,7 +4,6 @@ import "./pushup.css";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 import * as poseDetection from '@tensorflow-models/pose-detection';
-
 import { checkBackStraight, checkDistance, drawKeypoints, drawSkeleton, pushupAngle } from "./drawing-utilities";
 import NewPost from "./newPost";
 
