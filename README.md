@@ -2,7 +2,9 @@
 Orbital Project to create a Social Media Web App that can detect pushups through your webcam.
 
 # Try it out
-https://begym-ms3.netlify.app/
+Just pushups:
+https://begym-pushups.netlify.app/ 
+(other features are down)
 
 # Build from source instructions:
 
