@@ -4,7 +4,7 @@ Orbital Project to create a Social Media Web App that can detect pushups through
 # Try it out
 Just pushups:
 https://begym-pushups.netlify.app/ 
-(other features are down)
+(social media features have been disabled due to upkeep costs)
 
 # Build from source instructions:
 
